@@ -91,10 +91,10 @@ To install a new dependency, you'll need to go through multiple steps while Dock
 
 ```sh
 # Install in the container first
-docker-compose run --rm -e COMPOSER_VENDOR_DIR=/srv/app/vendor webapp composer require [package-name]
+docker-compose exec webapp composer require [package-name]
 
 # Then install in the directory shared with your host
-docker-compose exec webapp composer require [package-name]
+docker-compose exec -e COMPOSER_VENDOR_DIR=/srv/app/vendor webapp composer require [package-name]
 ```
 
 At this point, it's probably a good idea to bring down your containers, rebuild them, and start Docker again.
