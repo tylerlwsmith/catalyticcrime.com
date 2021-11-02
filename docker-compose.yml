@@ -18,6 +18,8 @@ services:
       XDEBUG_ENABLE: "true"
     ports:
       - "9000:9000"
+    depends_on:
+      - database
 
   webserver:
     container_name: catalytic-webserver
