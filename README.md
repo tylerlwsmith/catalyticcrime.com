@@ -64,7 +64,7 @@ $user->is_admin = true;
 $user->save();
 ```
 
-Finally, you can visit the website at http://0.0.0.0:8000.
+Finally, you can visit the website at http://0.0.0.0:8080.
 
 ## Troubleshooting the local installation
 
