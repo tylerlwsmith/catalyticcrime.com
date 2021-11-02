@@ -64,6 +64,18 @@ $user->is_admin = true;
 $user->save();
 ```
 
+Finally, you can visit the website at http://0.0.0.0:8000.
+
+## Troubleshooting the local installation
+
+If you're having a **permissions issue** with the `laravel.log` file, manually set the permission in the running container (it seems to persist through rebuilds and restarts). The `Dockerfile` _should_ handle the permissions, but it didn't work when I installed on one of my laptops.
+
+```sh
+docker-compose exec webapp chown -R www-data:www-data /srv/app/storage
+```
+
+If you see `@livewireStyles` or `@livewireScripts` rendering as strings in the browser, make an edit to `layout.blade.php`, save, refresh the browser, undo the change and save again. That will clear the blade cache. It's a hacky solution, but it works.
+
 ## Installing new dependencies
 
 To install a new **Node package**, run the following command while Docker is running:
