@@ -32,9 +32,14 @@ To run locally, clone the project then `cd` into the project directory. Run the 
 cp .env.example .env
 docker-compose build
 docker-compose run --rm webapp composer install
-docker-compose run --rm webapp php artisan key:generate
 docker-compose run --rm webapp php artisan migrate
 docker-compose run --rm devserver npm install
+```
+
+Next, run the following command and copy its output from the console into the project's root `.env` file as the value for `APP_KEY`.
+
+```sh
+docker-compose run --rm webapp php artisan key:generate --show
 ```
 
 With this initial set up complete, you can bring up the app with the following command:
