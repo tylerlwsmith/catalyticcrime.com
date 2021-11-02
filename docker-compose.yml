@@ -1,0 +1,85 @@
+# https://docs.docker.com/compose/compose-file/compose-file-v3/
+version: "3.9"
+
+services:
+  webapp:
+    container_name: catalytic-webapp
+    build:
+      context: .
+      target: development
+      dockerfile: misc/Dockerfile
+    image: "tylerlwsmith/catalytic-webapp:${BUILD_TAG:-latest}"
+    restart: always
+    volumes:
+      - ./webapp:/srv/app
+    env_file: .env
+    environment:
+      PHP_OPCACHE_VALIDATE_TIMESTAMPS: 1
+      XDEBUG_ENABLE: "true"
+    ports:
+      - "9000:9000"
+
+  webserver:
+    container_name: catalytic-webserver
+    build:
+      context: .
+      target: development
+      dockerfile: webserver/Dockerfile
+    image: "tylerlwsmith/catalytic-webserver:${BUILD_TAG:-latest}"
+    restart: always
+    volumes:
+      - ./webserver/development:/etc/nginx/templates
+      - ./webapp/public:/srv/app/public
+      - ./webapp/storage/app/public:/srv/app/public/storage
+    ports:
+      - "8080:80"
+
+  devserver:
+    container_name: catalytic-devserver
+    image: node:16.9-alpine3.14
+    restart: always
+    user: node
+    working_dir: /srv/app
+    volumes:
+      - ./webapp:/srv/app
+    command: npm run hot
+    ports:
+      - "8000:8000"
+
+  database:
+    container_name: catalytic-database
+    image: postgres:13
+    restart: always
+    volumes:
+      - database:/var/lib/postgresql/data
+    ports:
+      - "${DB_PORT:-5432}:5432"
+    expose:
+      - "${DB_PORT:-5432}"
+    environment:
+      POSTGRES_DB: "${DB_DATABASE}"
+      POSTGRES_USER: "${DB_USERNAME}"
+      POSTGRES_PASSWORD: "${DB_PASSWORD}"
+
+  test-database:
+    container_name: test-catalytic-database
+    image: postgres:13
+    restart: always
+    volumes:
+      - test-database:/var/lib/postgresql/data
+    expose:
+      - "${DB_PORT:-5432}"
+    environment:
+      POSTGRES_DB: "${DB_DATABASE}"
+      POSTGRES_USER: "${DB_USERNAME}"
+      POSTGRES_PASSWORD: "${DB_PASSWORD}"
+
+  mailhog:
+    image: "mailhog/mailhog:v1.0.1"
+    ports:
+      - 1025:1025
+      - 8025:8025
+
+volumes:
+  database:
+  test-database:

@@ -1,0 +1,48 @@
+# https://docs.docker.com/compose/compose-file/compose-file-v3/
+version: "3.9"
+
+services:
+  webapp:
+    container_name: catalytic-webapp
+    image: "tylerlwsmith/catalytic-webapp:${BUILD_TAG:-latest}"
+    build:
+      context: .
+      target: production
+      dockerfile: misc/Dockerfile
+    env_file: ${ENV_FILE:-.env}
+    environment:
+      PHP_OPCACHE_VALIDATE_TIMESTAMPS: 1
+    networks:
+      - test-network
+
+  webserver:
+    container_name: catalytic-webserver
+    image: "tylerlwsmith/catalytic-webserver:${BUILD_TAG:-latest}"
+    build:
+      context: .
+      target: production
+      dockerfile: webserver/Dockerfile
+    networks:
+      - test-network
+
+  test-database:
+    container_name: test-catalytic-database
+    image: postgres:13
+    volumes:
+      - test-database:/var/lib/postgresql/data
+    ports:
+      - "${DB_PORT:-5432}:5432"
+    expose:
+      - "${DB_PORT:-5432}"
+    environment:
+      POSTGRES_DB: "${DB_DATABASE}"
+      POSTGRES_USER: "${DB_USERNAME}"
+      POSTGRES_PASSWORD: "${DB_PASSWORD}"
+    networks:
+      - test-network
+
+volumes:
+  test-database:
+
+networks:
+  test-network:
