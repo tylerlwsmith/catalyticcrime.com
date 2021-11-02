@@ -31,7 +31,7 @@ To run locally, clone the project then `cd` into the project directory. Run the 
 ```sh
 cp .env.example .env
 docker-compose build
-docker-compose run --rm webapp composer install
+docker-compose run --rm -e COMPOSER_VENDOR_DIR=/srv/app/vendor webapp composer install
 docker-compose run --rm webapp php artisan migrate
 docker-compose run --rm devserver npm install
 ```
@@ -78,10 +78,10 @@ To install a new dependency, you'll need to go through multiple steps while Dock
 
 ```sh
 # Install in the container first
-docker exec webapp COMPOSER_VENDOR_DIR="/srv/vendor" composer require [package-name]
+docker-compose run --rm -e COMPOSER_VENDOR_DIR=/srv/app/vendor webapp composer require [package-name]
 
 # Then install in the directory shared with your host
-docker exec webapp composer require [package-name]
+docker-compose exec webapp composer require [package-name]
 ```
 
 At this point, it's probably a good idea to bring down your containers, rebuild them, and start Docker again.
