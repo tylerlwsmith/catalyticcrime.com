@@ -10,7 +10,7 @@ In the two weeks that I worked on this project, I completed the following:
 
 - I containerized the app with separate containers for the PHP web app, the nginx web server, the Node.js dev server, the PostgreSQL database, a testing PostgreSQL database, and MailHog for checking emails in development.
 - I set up auth and account creation with Laravel Breeze.
-- I configured React and TypeScript, through I ended up swapping out React for Laravel Livewire.
+- I configured React and TypeScript, though I ended up swapping out React for Laravel Livewire.
 - I set up a form for users to create and edit reports using Laravel Livewire that provides server-powered reactivity on the front-end.
 - I set up an admin-approval process for new reports, where admins are notified of new reports via email then can approve them using the web app.
 - I created a paginated reports index page for reports and single report page.
