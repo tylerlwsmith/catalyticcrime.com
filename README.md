@@ -31,7 +31,7 @@ To run locally, clone the project then `cd` into the project directory. Run the 
 ```sh
 cp .env.example .env
 docker-compose build
-docker-compose run --rm webapp composer install
+docker-compose run --rm -e COMPOSER_VENDOR_DIR=/srv/app/vendor webapp composer install
 docker-compose run --rm webapp php artisan migrate
 docker-compose run --rm devserver npm install
 ```
@@ -64,6 +64,19 @@ $user->is_admin = true;
 $user->save();
 ```
 
+Finally, you can visit the website at http://0.0.0.0:8080.
+
+## Troubleshooting the local installation
+
+If you're having a **permissions issue** with the `laravel.log` file or the `cache` directory, manually set the permission in the running container (it seems to persist through rebuilds and restarts). The `Dockerfile` _should_ handle the permissions, but it didn't work when I installed on one of my laptops. _This needs a better fix but I'm no longer working on this project._ 
+
+```sh
+docker-compose exec webapp chown -R www-data:www-data /srv/app/storage
+docker-compose exec webapp chown -R www-data:www-data /srv/app/bootstrap
+```
+
+If you see `@livewireStyles` or `@livewireScripts` rendering as strings in the browser, make an edit to `layout.blade.php`, save, refresh the browser, undo the change and save again. That will clear the blade cache. It's a hacky solution, but it works.
+
 ## Installing new dependencies
 
 To install a new **Node package**, run the following command while Docker is running:
@@ -78,10 +91,10 @@ To install a new dependency, you'll need to go through multiple steps while Dock
 
 ```sh
 # Install in the container first
-docker exec webapp COMPOSER_VENDOR_DIR="/srv/vendor" composer require [package-name]
+docker-compose exec webapp composer require [package-name]
 
 # Then install in the directory shared with your host
-docker exec webapp composer require [package-name]
+docker-compose exec -e COMPOSER_VENDOR_DIR=/srv/app/vendor webapp composer require [package-name]
 ```
 
 At this point, it's probably a good idea to bring down your containers, rebuild them, and start Docker again.
