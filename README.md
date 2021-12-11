@@ -4,19 +4,19 @@
 
 ---
 
-This project was built over the course of two weeks as a proof-of-concept for tracking catalytic converter crimes in Bakersfield, CA. I follow the Kern County Scanner Club Facebook group, and one of the most commonly reported crimes on the page is catalytic converter theft. These posts are often accompanied by pictures or videos of the crimes. The idea behind this project was creating a centralized platform where users could submit public reports about the crimes and attach pictures & videos they may have of the incident. Data from user-submitted reports would be combined with police department data so the site could show various insights about catalytic converter crime in Bakersfield.
+This project was built over the course of two weeks as a proof-of-concept for tracking catalytic converter thefts in Bakersfield, CA. I follow the Kern County Scanner Club Facebook group, and one of the most commonly reported crimes on the page is catalytic converter theft. These posts are often accompanied by pictures or videos of the crimes. The idea behind this project was creating a centralized platform where users could submit public reports about the crimes and attach pictures & videos they may have of the incident. Data from user-submitted reports would be combined with police department data so the site could show various insights about catalytic converter thefts in Bakersfield.
 
 In the two weeks that I worked on this project, I completed the following:
 
-- I containerized the app with separate containers for the PHP web app, the nginx web server, the Node.js dev server, the PostgreSQL database, a testing PostgreSQL database, and MailHog for checking emails in development.
-- I set up auth and account creation with Laravel Breeze.
-- I configured React and TypeScript, though I ended up swapping out React for Laravel Livewire.
-- I set up a form for users to create and edit reports using Laravel Livewire that provides server-powered reactivity on the front-end.
-- I set up an admin-approval process for new reports, where admins are notified of new reports via email then can approve them using the web app.
-- I created a paginated reports index page for reports and single report page.
-- I created a sparce-but-functional UI using Tailwind CSS and its form and typography plugins.
-- I set up DigitalOcean Spaces for S3-compatible object storage and used it for storing user uploads.
-- I set up CI/CD with Jenkins deploying to a $5/mo DigitalOcean droplet via Docker Compose (_which is currently broken since I moved the repo when I open-sourced this_).
+- **I containerized the app** with separate containers for the PHP web app, the nginx web server, the Node.js dev server, the PostgreSQL database, a testing PostgreSQL database, and MailHog for checking emails in development.
+- **I set up auth and account creation** with Laravel Breeze.
+- **I set up a form for users to create and edit reports** using Laravel Livewire that provides server-powered reactivity on the front-end.
+- **I set up an admin-approval process for new reports**, where admins are notified of new reports via email then can approve them using the web app.
+- **I created a paginated reports index page** for reports and a single report page.
+- **I created a sparce-but-functional UI** using Tailwind CSS, along with its form and typography plugins.
+- **I set up S3-compatible object storage** using DigitalOcean Spaces and configured it for storing user uploads.
+- **I wrote integration tests** that must pass before the site can deploy.
+- **I set up CI/CD with Jenkins** deploying to a $5/mo DigitalOcean droplet via Docker Compose (_which is currently broken since I moved the repo when I open-sourced this_).
 
 You can see the site running in production (currently without user submitted reports) at [catalyticcrime.com](https://catalyticcrime.com).
 
@@ -68,7 +68,7 @@ Finally, you can visit the website at http://0.0.0.0:8080.
 
 ## Troubleshooting the local installation
 
-If you're having a **permissions issue** with the `laravel.log` file or the `cache` directory, manually set the permission in the running container (it seems to persist through rebuilds and restarts). The `Dockerfile` _should_ handle the permissions, but it didn't work when I installed on one of my laptops. _This needs a better fix but I'm no longer working on this project._ 
+If you're having a **permissions issue** with the `laravel.log` file or the `cache` directory, manually set the permission in the running container (it seems to persist through rebuilds and restarts). The `Dockerfile` _should_ handle the permissions, but it didn't work when I installed on one of my laptops. _This needs a better fix but I'm no longer working on this project._
 
 ```sh
 docker-compose exec webapp chown -R www-data:www-data /srv/app/storage
