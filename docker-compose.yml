@@ -9,7 +9,7 @@ services:
       target: development
       dockerfile: misc/Dockerfile
     image: "tylerlwsmith/catalytic-webapp:${BUILD_TAG:-latest}"
-    restart: always
+    restart: unless-stopped
     volumes:
       - ./webapp:/srv/app
     env_file: .env
@@ -28,7 +28,7 @@ services:
       target: development
       dockerfile: webserver/Dockerfile
     image: "tylerlwsmith/catalytic-webserver:${BUILD_TAG:-latest}"
-    restart: always
+    restart: unless-stopped
     volumes:
       - ./webserver/development:/etc/nginx/templates
       - ./webapp/public:/srv/app/public
@@ -39,7 +39,7 @@ services:
   devserver:
     container_name: catalytic-devserver
     image: node:16.9-alpine3.14
-    restart: always
+    restart: unless-stopped
     user: node
     working_dir: /srv/app
     volumes:
@@ -51,7 +51,7 @@ services:
   database:
     container_name: catalytic-database
     image: postgres:13
-    restart: always
+    restart: unless-stopped
     volumes:
       - database:/var/lib/postgresql/data
     ports:
@@ -66,7 +66,7 @@ services:
   test-database:
     container_name: test-catalytic-database
     image: postgres:13
-    restart: always
+    restart: unless-stopped
     volumes:
       - test-database:/var/lib/postgresql/data
     expose:
